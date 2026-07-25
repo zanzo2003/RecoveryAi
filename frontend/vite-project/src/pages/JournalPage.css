@@ -1,0 +1,135 @@
+.journal-page {
+  min-height: 100vh;
+  background: #0f0f1a;
+  color: #e0e0f0;
+}
+
+.journal-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.journal-title {
+  font-size: 1.5rem;
+  margin: 0 0 1.5rem;
+  color: #e0e0f0;
+}
+
+.journal-form {
+  background: #1a1a2e;
+  border: 1px solid #2d2d4e;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  color: #a0a0b8;
+  font-weight: 500;
+}
+
+.mood-selector {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mood-btn {
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid #2d2d4e;
+  background: #0f0f1a;
+  color: #a0a0b8;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: capitalize;
+}
+
+.mood-btn:hover { border-color: #7c6af7; color: #e0e0f0; }
+.mood-btn.selected { background: #7c6af7; border-color: #7c6af7; color: #fff; }
+
+.journal-textarea {
+  background: #0f0f1a;
+  border: 1px solid #2d2d4e;
+  border-radius: 10px;
+  color: #e0e0f0;
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  resize: vertical;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.journal-textarea:focus { border-color: #7c6af7; }
+
+.journal-error {
+  background: #3a0a0a;
+  border: 1px solid #991b1b;
+  color: #f87171;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.journal-submit {
+  background: #7c6af7;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.journal-submit:hover:not(:disabled) { background: #6a59e0; }
+.journal-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.list-title {
+  font-size: 1.1rem;
+  color: #a0a0b8;
+  margin: 0 0 1rem;
+  font-weight: 500;
+}
+
+.journal-empty { color: #555; font-size: 0.9rem; }
+
+.journal-card {
+  background: #1a1a2e;
+  border: 1px solid #2d2d4e;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.85rem;
+}
+
+.journal-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.journal-mood {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c0c0d8;
+  text-transform: capitalize;
+}
+
+.journal-date { font-size: 0.8rem; color: #666; }
+
+.journal-card-content {
+  margin: 0;
+  color: #c0c0d8;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  font-size: 0.925rem;
+}
