@@ -13,6 +13,7 @@ const ChatPage = () => {
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState(null);
   const [emergency, setEmergency] = useState(null);
+  const [emergencyContacts, setEmergencyContacts] = useState([]);
   const [audioBase64, setAudioBase64] = useState(null);
   const bottomRef = useRef(null);
 
@@ -45,6 +46,7 @@ const ChatPage = () => {
 
       if (data.emergencyScript && ['high', 'emergency'].includes(data.riskLevel)) {
         setEmergency(data.emergencyScript);
+        setEmergencyContacts(data.emergencyContacts || []);
       }
     } catch {
       setMessages((prev) => [
@@ -101,7 +103,7 @@ const ChatPage = () => {
         </button>
       </form>
       <AudioPlayer audioBase64={audioBase64} />
-      <EmergencyModal script={emergency} onClose={() => setEmergency(null)} />
+      <EmergencyModal script={emergency} contacts={emergencyContacts} onClose={() => setEmergency(null)} />
     </div>
   );
 };

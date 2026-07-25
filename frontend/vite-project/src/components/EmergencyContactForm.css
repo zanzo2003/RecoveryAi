@@ -1,0 +1,60 @@
+.ec-form {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin-bottom: 0.8rem;
+}
+
+.ec-form h3 {
+  display: none;
+}
+
+.ec-form input {
+  width: 100%;
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 0.5rem;
+  background: #0f0f1a;
+  border: 1px solid #2d2d4e;
+  border-radius: 6px;
+  color: #e0e0f0;
+  font-size: 0.8rem;
+  box-sizing: border-box;
+}
+
+.ec-form input::placeholder {
+  font-size: 0.75rem;
+}
+
+.ec-form input:focus {
+  outline: none;
+  border-color: #7c6af7;
+}
+
+.ec-form button {
+  width: 100%;
+  padding: 0.5rem;
+  background: #7c6af7;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ec-form button:hover:not(:disabled) {
+  background: #6a59e0;
+}
+
+.ec-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ec-error {
+  color: #f87171;
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}

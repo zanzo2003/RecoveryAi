@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import RiskBadge from '../components/RiskBadge';
+import AddEmergencyContactModal from '../components/AddEmergencyContactModal';
+import EmergencyContactsList from '../components/EmergencyContactsList';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import './CaregiverPage.css';
@@ -8,14 +10,20 @@ import './CaregiverPage.css';
 const CaregiverPage = () => {
   const { user } = useAuth();
   const [summary, setSummary] = useState(null);
+  const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
       try {
-        const { data } = await api.get('/api/caregiver/summary');
-        setSummary(data);
+        const [summaryRes, contactsRes] = await Promise.all([
+          api.get('/api/caregiver/summary'),
+          api.get('/api/emergency-contacts'),
+        ]);
+        setSummary(summaryRes.data);
+        setContacts(contactsRes.data.contacts);
       } catch {
         setError('Failed to load caregiver summary');
       } finally {
@@ -45,11 +53,11 @@ const CaregiverPage = () => {
             <div className="cg-stats">
               <div className="cg-stat-card">
                 <div className="stat-number">{summary.recentSessions.length}</div>
-                <div className="stat-label">Recent Sessions</div>
+                <div className="stat-label">Sessions</div>
               </div>
               <div className="cg-stat-card">
                 <div className="stat-number">{summary.journalCount}</div>
-                <div className="stat-label">Journal Entries</div>
+                <div className="stat-label">Journals</div>
               </div>
               <div className="cg-stat-card">
                 <div className="stat-number">{summary.riskHistory.length}</div>
@@ -57,38 +65,54 @@ const CaregiverPage = () => {
               </div>
             </div>
 
-            <section className="cg-section">
-              <h2 className="cg-section-title">Recent Sessions</h2>
-              {summary.recentSessions.length === 0 && (
-                <p className="cg-empty">No sessions yet.</p>
-              )}
-              {summary.recentSessions.map((s) => (
-                <div key={s.id} className="cg-session-card">
-                  <div className="cg-session-info">
-                    <span className="cg-session-date">{formatDate(s.createdAt)}</span>
-                    <span className="cg-session-msgs">{s.messageCount} messages</span>
-                  </div>
-                  <RiskBadge level={s.latestRisk} />
-                </div>
-              ))}
-            </section>
-
-            <section className="cg-section">
-              <h2 className="cg-section-title">Risk History</h2>
-              {summary.riskHistory.length === 0 && (
-                <p className="cg-empty">No risk events recorded.</p>
-              )}
-              <div className="cg-risk-timeline">
-                {summary.riskHistory.map((r, i) => (
-                  <div key={i} className="cg-risk-entry">
-                    <RiskBadge level={r.level} />
-                    <span className="cg-risk-time">{formatDate(r.timestamp)}</span>
+            <div className="cg-dashboard">
+              <section className="cg-section">
+                <h2 className="cg-section-title">Recent Sessions</h2>
+                {summary.recentSessions.length === 0 && (
+                  <p className="cg-empty">No sessions yet.</p>
+                )}
+                {summary.recentSessions.slice(0, 4).map((s) => (
+                  <div key={s.id} className="cg-session-card">
+                    <div className="cg-session-info">
+                      <span className="cg-session-date">{formatDate(s.createdAt)}</span>
+                      <span className="cg-session-msgs">{s.messageCount} msgs</span>
+                    </div>
+                    <RiskBadge level={s.latestRisk} />
                   </div>
                 ))}
-              </div>
-            </section>
+              </section>
+
+              <section className="cg-section">
+                <h2 className="cg-section-title">🚨 Emergency Contacts</h2>
+                <EmergencyContactsList
+                  contacts={contacts}
+                  onContactsUpdated={setContacts}
+                  onAddClick={() => setIsModalOpen(true)}
+                />
+              </section>
+
+              <section className="cg-section">
+                <h2 className="cg-section-title">Risk History</h2>
+                {summary.riskHistory.length === 0 && (
+                  <p className="cg-empty">No risk events recorded.</p>
+                )}
+                <div className="cg-risk-timeline">
+                  {summary.riskHistory.slice(0, 6).map((r, i) => (
+                    <div key={i} className="cg-risk-entry">
+                      <RiskBadge level={r.level} />
+                      <span className="cg-risk-time">{formatDate(r.timestamp)}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </div>
           </>
         )}
+        <AddEmergencyContactModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onContactAdded={setContacts}
+        />
       </div>
     </div>
   );

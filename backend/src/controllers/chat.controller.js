@@ -1,6 +1,7 @@
 const Session = require('../models/Session');
 const recoveryAgent = require('../agents/recovery.agent');
 const { tts } = require('../services/openai.service');
+const riskTool = require('../tools/risk.tool');
 
 const chat = async (req, res) => {
   const { message, sessionId } = req.body;
@@ -30,15 +31,24 @@ const chat = async (req, res) => {
     }));
 
     // Run recovery agent
-    const { response, riskLevel, emergencyScript } = await recoveryAgent.run(history, userId);
+    const { response, emergencyScript } = await recoveryAgent.run(history, userId);
+
+    // Always assess risk for this conversation
+    const conversationSummary = session.messages.slice(-4).map(m => `${m.role}: ${m.content}`).join('\n');
+    const riskAssessmentResult = await riskTool.execute({ args: { conversation_summary: conversationSummary } });
+    let riskLevel = 'low';
+    try {
+      const parsed = JSON.parse(riskAssessmentResult);
+      riskLevel = parsed.level || 'low';
+    } catch {
+      // default to low on parse error
+    }
 
     // Persist assistant reply
     session.messages.push({ role: 'assistant', content: response, riskLevel });
 
-    // Track risk history on medium/high/emergency
-    if (['medium', 'high', 'emergency'].includes(riskLevel)) {
-      session.riskHistory.push({ level: riskLevel });
-    }
+    // Track all risk levels in history
+    session.riskHistory.push({ level: riskLevel });
 
     await session.save();
 
@@ -50,10 +60,19 @@ const chat = async (req, res) => {
       // TTS is non-critical; continue without audio
     }
 
+    // Include emergency contacts if high/emergency risk detected
+    let emergencyContacts = [];
+    if (['high', 'emergency'].includes(riskLevel)) {
+      const User = require('../models/User');
+      const user = await User.findById(userId).select('emergencyContacts');
+      emergencyContacts = user?.emergencyContacts || [];
+    }
+
     res.json({
       reply: response,
       riskLevel,
       emergencyScript,
+      emergencyContacts,
       audioBase64,
       sessionId: session._id,
     });

@@ -8,6 +8,7 @@ const authRoutes = require('./src/routes/auth.routes');
 const chatRoutes = require('./src/routes/chat.routes');
 const journalRoutes = require('./src/routes/journal.routes');
 const caregiverRoutes = require('./src/routes/caregiver.routes');
+const emergencyContactsRoutes = require('./src/routes/emergency-contacts.routes');
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/journal', journalRoutes);
 app.use('/api/caregiver', caregiverRoutes);
+app.use('/api/emergency-contacts', emergencyContactsRoutes);
 
 // 404
 app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
