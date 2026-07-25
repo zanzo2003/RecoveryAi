@@ -1,0 +1,92 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-box {
+  background: #1a0a0a;
+  border: 2px solid #991b1b;
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 520px;
+  width: 100%;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-icon { font-size: 1.5rem; }
+
+.modal-header h2 {
+  margin: 0;
+  color: #f87171;
+  font-size: 1.3rem;
+}
+
+.modal-subtitle {
+  color: #fca5a5;
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+}
+
+.modal-content {
+  background: #2a0f0f;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  color: #fde8e8;
+  line-height: 1.65;
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.crisis-btn {
+  flex: 1;
+  background: #dc2626;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.crisis-btn:hover { background: #b91c1c; }
+
+.close-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #555;
+  color: #ccc;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.close-btn:hover { border-color: #888; color: #fff; }
