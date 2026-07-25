@@ -9,16 +9,15 @@ const EmergencyModal = ({ script, contacts, onClose }) => {
           <span className="modal-icon">🚨</span>
           <h2>Emergency Support</h2>
         </div>
-        <p className="modal-subtitle">You are not alone. Here are your next steps:</p>
-        <div className="modal-content">
-          <p>{script}</p>
-        </div>
 
-        <div className="modal-contacts">
-          <h3>Call for Help</h3>
-          <a href="tel:988" className="crisis-btn primary">📞 Call 988 Crisis Line</a>
+        <div className="modal-scroll">
+          <p className="modal-subtitle">You are not alone. Here are your next steps:</p>
+          <div className="modal-content">
+            <p>{script}</p>
+          </div>
+
           {contacts && contacts.length > 0 && (
-            <>
+            <div className="modal-contacts">
               <p className="contacts-divider">Or reach out to someone you trust:</p>
               {contacts.map((contact) => (
                 <a
@@ -30,11 +29,12 @@ const EmergencyModal = ({ script, contacts, onClose }) => {
                   👤 {contact.name} ({contact.relation})
                 </a>
               ))}
-            </>
+            </div>
           )}
         </div>
 
         <div className="modal-footer">
+          <a href="tel:988" className="crisis-btn primary">📞 Call 988 Crisis Line</a>
           <button onClick={onClose} className="close-btn">I'm okay, close this</button>
         </div>
       </div>

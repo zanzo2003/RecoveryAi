@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import './VoiceButton.css';
 
-const VoiceButton = ({ onTranscript, disabled }) => {
+const VoiceButton = ({ onTranscript, disabled, size }) => {
   const [listening, setListening] = useState(false);
   const [error, setError] = useState('');
   const recognitionRef = useRef(null);
@@ -48,7 +48,7 @@ const VoiceButton = ({ onTranscript, disabled }) => {
   return (
     <div className="voice-wrapper">
       <button
-        className={`voice-btn ${listening ? 'listening' : ''}`}
+        className={`voice-btn ${size === 'large' ? 'voice-btn-large' : ''} ${listening ? 'listening' : ''}`}
         onClick={listening ? stopListening : startListening}
         disabled={disabled}
         aria-label={listening ? 'Stop recording' : 'Start voice input'}

@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import RiskBadge from '../components/RiskBadge';
 import AddEmergencyContactModal from '../components/AddEmergencyContactModal';
 import EmergencyContactsList from '../components/EmergencyContactsList';
+import RecoveryReportModal from '../components/RecoveryReportModal';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import './CaregiverPage.css';
@@ -14,6 +15,7 @@ const CaregiverPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReportOpen, setIsReportOpen] = useState(false);
 
   useEffect(() => {
     const fetch = async () => {
@@ -42,8 +44,15 @@ const CaregiverPage = () => {
     <div className="caregiver-page">
       <Navbar />
       <div className="caregiver-container">
-        <h1 className="caregiver-title">👨‍👩‍👧 Caregiver View</h1>
-        <p className="caregiver-subtitle">Recovery overview for <strong>{user?.name}</strong></p>
+        <div className="caregiver-header">
+          <div>
+            <h1 className="caregiver-title">👨‍👩‍👧 Caregiver View</h1>
+            <p className="caregiver-subtitle">Recovery overview for <strong>{user?.name}</strong></p>
+          </div>
+          <button className="cg-report-btn" onClick={() => setIsReportOpen(true)}>
+            📋 Generate Recovery Report
+          </button>
+        </div>
 
         {loading && <p className="cg-loading">Loading…</p>}
         {error && <p className="cg-error">{error}</p>}
@@ -112,6 +121,10 @@ const CaregiverPage = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onContactAdded={setContacts}
+        />
+        <RecoveryReportModal
+          isOpen={isReportOpen}
+          onClose={() => setIsReportOpen(false)}
         />
       </div>
     </div>

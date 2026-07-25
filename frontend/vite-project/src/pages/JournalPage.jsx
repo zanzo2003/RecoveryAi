@@ -12,6 +12,9 @@ const JournalPage = () => {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [tip, setTip] = useState('');
+  const [tipLoading, setTipLoading] = useState(false);
+  const [tipError, setTipError] = useState('');
 
   const fetchJournals = async () => {
     setLoading(true);
@@ -42,6 +45,20 @@ const JournalPage = () => {
     }
   };
 
+  const handleGetTip = async () => {
+    setTipLoading(true);
+    setTipError('');
+    setTip('');
+    try {
+      const { data } = await api.get('/api/journal/tip');
+      setTip(data.tip);
+    } catch {
+      setTipError('Failed to get a tip. Please try again.');
+    } finally {
+      setTipLoading(false);
+    }
+  };
+
   const formatDate = (iso) =>
     new Date(iso).toLocaleString(undefined, {
       month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
@@ -51,7 +68,20 @@ const JournalPage = () => {
     <div className="journal-page">
       <Navbar />
       <div className="journal-container">
-        <h1 className="journal-title">📔 Recovery Journal</h1>
+        <div className="journal-header">
+          <h1 className="journal-title">📔 Recovery Journal</h1>
+          <button className="tip-btn" onClick={handleGetTip} disabled={tipLoading}>
+            {tipLoading ? 'Thinking…' : '💡 Get a Tip'}
+          </button>
+        </div>
+
+        {tipError && <div className="tip-error">{tipError}</div>}
+        {tip && (
+          <div className="tip-card">
+            <span className="tip-icon">💡</span>
+            <p className="tip-text">{tip}</p>
+          </div>
+        )}
 
         <form className="journal-form" onSubmit={handleSubmit}>
           <label className="form-label">How are you feeling?</label>

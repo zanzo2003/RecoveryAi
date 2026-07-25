@@ -82,4 +82,32 @@ const chat = async (req, res) => {
   }
 };
 
-module.exports = { chat };
+const getSessions = async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const sessions = await Session.find({ userId })
+      .sort({ createdAt: -1 })
+      .select('createdAt');
+    res.json({
+      sessions: sessions.map((s) => ({ id: s._id, createdAt: s.createdAt })),
+    });
+  } catch (err) {
+    console.error('Get sessions error:', err);
+    res.status(500).json({ message: 'Failed to fetch sessions' });
+  }
+};
+
+const getSession = async (req, res) => {
+  const userId = req.user.id;
+  const { sessionId } = req.params;
+  try {
+    const session = await Session.findOne({ _id: sessionId, userId });
+    if (!session) return res.status(404).json({ message: 'Session not found' });
+    res.json({ sessionId: session._id, messages: session.messages });
+  } catch (err) {
+    console.error('Get session error:', err);
+    res.status(500).json({ message: 'Failed to fetch session' });
+  }
+};
+
+module.exports = { chat, getSessions, getSession };

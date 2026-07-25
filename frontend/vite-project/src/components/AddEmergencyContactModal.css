@@ -13,8 +13,11 @@
   background: #1a1a2e;
   border: 1px solid #2d2d4e;
   border-radius: 12px;
-  width: 100%;
-  max-width: 420px;
+  width: 420px;
+  height: 500px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: slideUp 0.3s ease;
 }
@@ -36,6 +39,7 @@
   justify-content: space-between;
   padding: 1.5rem;
   border-bottom: 1px solid #2d2d4e;
+  flex-shrink: 0;
 }
 
 .modal-header-ec h2 {
@@ -67,6 +71,10 @@
 
 .modal-form-ec {
   padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .form-group-ec {
@@ -114,11 +122,15 @@
   font-size: 0.9rem;
   margin-bottom: 1rem;
   border: 1px solid #7c2d2d;
+  flex-shrink: 0;
 }
 
 .modal-footer-ec {
   display: flex;
   gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid #2d2d4e;
+  flex-shrink: 0;
 }
 
 .btn-cancel-ec,
