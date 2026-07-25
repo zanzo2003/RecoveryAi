@@ -2,6 +2,8 @@
 
 AI-powered recovery and relapse-prevention companion for people navigating Substance Use Disorders (SUD), with caregiver visibility and emergency escalation support.
 
+username - test@gmail.com  , password - test@gmail.com
+
 ## What this app does
 
 - Voice-first and text-based AI chat for recovery support
