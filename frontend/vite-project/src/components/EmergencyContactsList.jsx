@@ -6,6 +6,7 @@ const EmergencyContactsList = ({ contacts, onContactsUpdated, onAddClick }) => {
   const [deleting, setDeleting] = useState(null);
 
   const handleDelete = async (contactId) => {
+    if (!window.confirm('Delete this emergency contact?')) return;
     setDeleting(contactId);
     try {
       const { data } = await api.delete(`/api/emergency-contacts/${contactId}`);

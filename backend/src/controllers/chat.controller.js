@@ -1,4 +1,5 @@
 const Session = require('../models/Session');
+const User = require('../models/User');
 const recoveryAgent = require('../agents/recovery.agent');
 const { tts } = require('../services/openai.service');
 const riskTool = require('../tools/risk.tool');
@@ -30,12 +31,12 @@ const chat = async (req, res) => {
       content: m.content,
     }));
 
-    // Run recovery agent
-    const { response, emergencyScript } = await recoveryAgent.run(history, userId);
-
-    // Always assess risk for this conversation
+    // Run recovery agent and risk assessment concurrently (risk assessment only needs the user's message so far)
     const conversationSummary = session.messages.slice(-4).map(m => `${m.role}: ${m.content}`).join('\n');
-    const riskAssessmentResult = await riskTool.execute({ args: { conversation_summary: conversationSummary } });
+    const [{ response, emergencyScript }, riskAssessmentResult] = await Promise.all([
+      recoveryAgent.run(history, userId),
+      riskTool.execute({ args: { conversation_summary: conversationSummary } }),
+    ]);
     let riskLevel = 'low';
     try {
       const parsed = JSON.parse(riskAssessmentResult);
@@ -63,7 +64,6 @@ const chat = async (req, res) => {
     // Include emergency contacts if high/emergency risk detected
     let emergencyContacts = [];
     if (['high', 'emergency'].includes(riskLevel)) {
-      const User = require('../models/User');
       const user = await User.findById(userId).select('emergencyContacts');
       emergencyContacts = user?.emergencyContacts || [];
     }

@@ -29,6 +29,7 @@ const updateContact = async (req, res) => {
   const { name, phone, relation } = req.body;
   try {
     const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
     const contact = user.emergencyContacts.id(contactId);
     if (!contact) return res.status(404).json({ message: 'Contact not found' });
     contact.name = name || contact.name;
@@ -45,6 +46,7 @@ const deleteContact = async (req, res) => {
   const { contactId } = req.params;
   try {
     const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
     const contact = user.emergencyContacts.id(contactId);
     if (!contact) return res.status(404).json({ message: 'Contact not found' });
     contact.deleteOne();
